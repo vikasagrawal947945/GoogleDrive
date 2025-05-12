@@ -1,12 +1,31 @@
-# React + Vite
+# Google Drive App 📦
+A modern web application built using **React**, **Firebase**, and **Redux Toolkit**. This app provides a simple user authentication flow along with protected routes, loading states, and custom alerts — all styled using **Tailwind CSS**.
+---
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Features
 
-Currently, two official plugins are available:
+- 🔐 Firebase Authentication (Login/Signup)
+- 🔄 Global State Management using Redux Toolkit
+- ⚡ Protected Routes for authenticated users
+- 🌐 Custom Alert Notification with Progress Bar
+- 🎯 Full Tailwind CSS Responsive Design
+- 🔁 Real-time Auth Listener
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
+## 🛠️ Technologies Used
 
-## Expanding the ESLint configuration
+- React.js
+- Redux Toolkit
+- Firebase Auth
+- Tailwind CSS
+- React Router DOM
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 📦 Installation
+
+```bash
+git clone https://github.com/your-username/GoogleDrive.git
+cd GoogleDrive
+npm install
+npm start
