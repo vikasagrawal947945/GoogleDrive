@@ -47,7 +47,7 @@ const Home = () => {
   }, [dispatch, user]);
 
   // Fetch files from Cloudinary
-  const fetchCloudinaryFiles = async () => {
+   const fetchCloudinaryFiles = async () => {
     try {
       const response = await axios.get('https://api.cloudinary.com/v1_1/g-drive/resources/image', {
         params: {

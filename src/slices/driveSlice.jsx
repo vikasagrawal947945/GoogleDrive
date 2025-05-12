@@ -3,8 +3,8 @@ import { db } from '../firebase'; // Firebase Firestore
 
 // Function to upload file to Cloudinary
 const uploadToCloudinary = async (file) => {
-  const cloudName = 'dwp7cmnqk'; // Cloudinary cloud name
-  const uploadPreset = 'g-drive'; // Cloudinary upload preset
+  const cloudName = 'dgpzoqts7'; // Cloudinary cloud name
+  const uploadPreset = 'my_unsigned_preset'; // Cloudinary upload preset
 
   const formData = new FormData();
   formData.append('file', file);

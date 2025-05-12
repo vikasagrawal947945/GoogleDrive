@@ -11,12 +11,14 @@ function SignInPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleGoogleLogin = async () => {
+  const handleGoogleLogin  = async () => {
     try {
       dispatch(setLoading(true));
       const result = await signInWithPopup(auth, provider);
 
       const user = result.user;
+
+      // Extract only serializable fields
       const cleanUser = {
         uid: user.uid,
         email: user.email,
@@ -24,18 +26,19 @@ function SignInPage() {
         photoURL: user.photoURL,
       };
 
-      dispatch(setUserInfo(cleanUser));
-      dispatch(setMessage("Welcome back! 🎉"));
-      navigate("/");
+      dispatch(setUserInfo(cleanUser)); // Only store cleanUser
+      dispatch(setMessage("Logged in successfully ✅"));
+      navigate("/"); // Go to Home after login
     } catch (error) {
       if (error.code === "auth/popup-closed-by-user") {
-        dispatch(setMessage("Login cancelled ❌"));
+        dispatch(setMessage("Login cancelled by user ❌"));
       } else {
-        console.error("Auth error:", error);
-        dispatch(setMessage("Oops! Something went wrong."));
+        console.error("Login error:", error);
+        dispatch(setMessage("Login failed ❌"));
       }
     }
   };
+
 
   return (
     <>
