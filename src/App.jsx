@@ -14,9 +14,9 @@ const customRouter = createBrowserRouter([
       {
         index: true,
         element: (
-          <Route>
-            <Home />
-          </Route>
+        <Route>
+          <Home></Home>
+        </Route>
         ),
       },
       {
@@ -27,7 +27,7 @@ const customRouter = createBrowserRouter([
   },
 ]);
 
-export default function MainApp() {
+export default function App() {
   return (
     <AuthStatusListener>
       <RouterProvider router={customRouter} />
