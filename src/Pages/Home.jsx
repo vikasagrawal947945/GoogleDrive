@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { signOut } from "firebase/auth";
 import axios from "axios";
-import { addFile, fetchFiles } from "../slices/driveSlice";
+import { addFile, fetchFiles } from "../slices/driveSlice"; 
 import { FaSearch, FaCloudUploadAlt, FaMobileAlt, FaLaptop, FaUsers, FaHistory, FaStar, FaTrashAlt, FaCloud, FaSignOutAlt } from "react-icons/fa";
 import { RiSpam2Line } from "react-icons/ri";
 import { TiCloudStorageOutline } from "react-icons/ti";
 import { FiHome } from "react-icons/fi";
 import Message from "../components/Message";
+ 
+import base64 from 'base-64'; // Or use btoa()
 
 const Home = () => {
   const navigate = useNavigate();
@@ -46,53 +48,55 @@ const Home = () => {
     }
   }, [dispatch, user]);
 
-  const fetchCloudinaryFiles = async () => {
-    const cloudName = "dgpzoqts7"; // ✅ Removed extra space
-    const apiKey = "981818695295234";
-    const apiSecret = "43g_F5YGZp2E054Z3MSfYrGmpto";
+  // Fetch files from Cloudinary
+const fetchCloudinaryFiles = async () => {
+  const cloudName = 'dgpzoqts7'; // ✅ Removed extra space
+  const apiKey = '981818695295234';
+  const apiSecret = '43g_F5YGZp2E054Z3MSfYrGmpto';
+
+  try {
+    const response = await axios.get(`https://api.cloudinary.com/v1_1/cloudName/resources/image`, {
+      auth: {
+        username: apiKey,
+        password: apiSecret,
+      },
+      params: {
+        max_results: 30,
+      },
+    });
+
+    setFiles(response.data.resources); // Your logic to store results
+  } catch (error) {
+    console.error('Error fetching Cloudinary files:', error);
+  }
+};
+
+const handleFileChange = (event) => {
+  setSelectedFile(event.target.files[0]); // Set the selected file for upload
+};
+
+const handleFileUpload = async () => {
+  if (selectedFile && user) {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('upload_preset', 'my_unsigned_preset');
 
     try {
-      const response = await axios.get(`https://api.cloudinary.com/v1_1/${cloudName}/resources/image`, {
-        auth: {
-          username: apiKey,
-          password: apiSecret,
-        },
-        params: {
-          max_results: 30,
-        },
-      });
+      const response = await axios.post('https://api.cloudinary.com/v1_1/dgpzoqts7/image/upload', formData);
+      const fileUrl = response.data.secure_url;
+      console.log(fileUrl);
 
-      setFiles(response.data.resources); // Your logic to store results
+      dispatch(addFile({ file: selectedFile, url: fileUrl, email: user.email })); // Add file to Redux
+      fetchCloudinaryFiles(); // Fetch updated files
+      setLoading(false);
     } catch (error) {
-      console.error("Error fetching Cloudinary files:", error);
+      console.error('File upload failed:', error);
+      setLoading(false);
     }
-  };
+  }
+};
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]); // Set the selected file for upload
-  };
-
-  const handleFileUpload = async () => {
-    if (selectedFile && user) {
-      setLoading(true);
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-      formData.append("upload_preset", "my_unsigned_preset");
-
-      try {
-        const response = await axios.post("https://api.cloudinary.com/v1_1/dgpzoqts7/image/upload", formData);
-        const fileUrl = response.data.secure_url;
-        console.log(fileUrl);
-
-        dispatch(addFile({ file: selectedFile, url: fileUrl, email: user.email })); // Add file to Redux
-        fetchCloudinaryFiles(); // Fetch updated files
-        setLoading(false);
-      } catch (error) {
-        console.error("File upload failed:", error);
-        setLoading(false);
-      }
-    }
-  };
 
   const handleLogout = async () => {
     try {
@@ -112,7 +116,7 @@ const Home = () => {
       <aside className="w-50 md:w-64 bg-gray-900 text-white p-5 hidden min-[500px]:flex flex-col">
         <button
           className="flex items-center text-lg space-x-3 p-3 hover:bg-gray-800 rounded-md w-full"
-          onClick={() => document.getElementById("file-input").click()} // Trigger file input
+          onClick={() => document.getElementById('file-input').click()} // Trigger file input
         >
           <FaCloudUploadAlt />
           <span>New</span>
@@ -187,17 +191,27 @@ const Home = () => {
           </div>
         </header>
 
+        {/* Button seen only on small screen */}
+        <div className="min-[500px]:hidden p-4 bg-gray-900 text-white">
+          <button
+            onClick={() => document.getElementById('file-input').click()} // Trigger file input
+            className="flex items-center space-x-2 bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md w-full justify-center"
+          >
+            <FaCloudUploadAlt />
+            <span>New</span>
+          </button>
+        </div>
+
         {/* File Grid */}
         <main className="flex-1 p-5 bg-gray-50">
           <div className="text-lg font-semibold mb-4">My Drive</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
             {files.map((file) => (
-              <div key={file.public_id} className="text-center p-5 bg-white rounded-lg shadow-lg">
-                <img
-                  src={file.secure_url} // Use Cloudinary URL here
-                  alt={file.filename}
-                  className="w-32 h-32 object-cover mb-3"
-                />
+              <div
+                key={file.public_id}
+                className="text-center p-5 bg-white rounded-lg shadow-lg"
+              >
+                <FaCloud className="text-gray-400 text-6xl mb-3" />
                 <p className="text-sm break-words">{file.filename}</p>
                 <p className="text-sm">{file.bytes} bytes</p>
               </div>
