@@ -7,7 +7,7 @@ export async function uploadToCloudinary(file) {
       formData.append("upload_preset", "my_unsigned_preset"); // ensure this exists in Cloudinary
   
       const res = await axios.post(
-        "https://api.cloudinary.com/v1_1/dwp7cmnqk/auto/upload",
+        "https://api.cloudinary.com/v1_1/dgpzoqts7/auto/upload",
         formData
       );
   
