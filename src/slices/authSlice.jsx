@@ -12,7 +12,7 @@ const authSl = createSlice({
       state.user = action.payload;
       state.loading = false;
     },
-    removeUserInfo: (state) => {
+    clearUser: (state) => {
       state.user = null;
       state.loading = false;
     },
@@ -25,5 +25,5 @@ const authSl = createSlice({
   },
 });
 
-export const { setUserInfo, removeUserInfo, setLoading, setMessage } = authSl.actions;
+export const { setUserInfo, clearUser, setLoading, setMessage } = authSl.actions;
 export const authSlice = authSl.reducer;

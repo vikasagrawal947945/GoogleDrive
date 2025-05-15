@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
 import { useDispatch } from "react-redux";
-import { setUserInfo, removeUserInfo } from "../slices/authSlice";
+import { setUserInfo , clearUser } from "../slices/authSlice";
 
 function AuthStatusListener({ children }) {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ function AuthStatusListener({ children }) {
         const { uid, email, displayName, photoURL } = currentUser;
         dispatch(setUserInfo({ uid, email, displayName, photoURL }));
       } else {
-        dispatch(removeUserInfo());
+        dispatch(clearUser());
       }
     });
 
